@@ -1,0 +1,175 @@
+
+## Objective
+
+The goal of this level was to find the password for Level 15.
+
+The password for the current level is stored in:
+
+/etc/bandit_pass/bandit14
+
+The next password needs to be submitted to a service running on:
+
+localhost:30000
+
+The goal is to send the current level's password to this service and retrieve the password for the next level.
+
+# Commands Used
+
+## cat /etc/bandit_pass/bandit14
+
+Purpose: Reads the password of the current user (bandit14).
+
+Command:
+
+cat /etc/bandit_pass/bandit14
+
+The output of this command is the password that needs to be sent to the local service.
+
+---
+
+## telnet localhost 30000
+
+Purpose: Connects to the service running on port 30000 on the local machine.
+
+Command:
+
+telnet localhost 30000
+
+Breakdown:
+
+- telnet → A protocol used to establish a connection with a remote service.
+- localhost → Connects to the current machine.
+- 30000 → The port number where the service is running.
+
+After connecting, enter the password obtained from:
+
+cat /etc/bandit_pass/bandit14
+
+The service verifies the password and returns the password for the next level.
+
+---
+
+## Alternative Command: nc localhost 30000
+
+Purpose: Uses Netcat to communicate with the service.
+
+Command:
+
+nc localhost 30000
+
+Breakdown:
+
+- nc → Netcat, a networking utility used to create TCP/UDP connections.
+- localhost → The target machine.
+- 30000 → The service port.
+
+Netcat performs the same task as telnet in this challenge.
+
+
+# Why This Solution Worked
+
+This level introduced communication with network services.
+
+Instead of directly reading the next password file, the password had to be obtained by interacting with a service running on a specific port.
+
+The process was:
+
+1. Read the current password using:
+
+cat /etc/bandit_pass/bandit14
+
+2. Connect to the service running on port 30000:
+
+telnet localhost 30000
+
+or:
+
+nc localhost 30000
+
+3. Provide the password when prompted.
+
+4. Receive the password for the next level.
+
+The service acts as a password verification system that only reveals the next password after receiving the correct input.
+
+---
+
+# Key Linux Concepts or Commands Learned
+
+## Ports
+
+A port is a logical endpoint used by applications to communicate over a network.
+
+A system can run multiple services at the same time by assigning each service a different port.
+
+Example:
+
+localhost:30000
+
+means:
+
+- localhost → the machine.
+- 30000 → the specific service running on that machine.
+
+---
+
+## localhost
+
+localhost refers to the current machine.
+
+IP address:
+
+127.0.0.1
+
+It is commonly used when applications communicate internally on the same system.
+
+---
+
+## telnet
+
+telnet is a command-line tool used to connect to services using the TCP protocol.
+
+Syntax:
+
+telnet <hostname> <port>
+
+Example:
+
+telnet localhost 30000
+
+It allows users to manually send and receive data from network services.
+
+---
+
+## nc (Netcat)
+
+Netcat is a powerful networking utility used for reading from and writing to network connections.
+
+Syntax:
+
+nc <hostname> <port>
+
+Example:
+
+nc localhost 30000
+
+Common uses:
+
+- Testing network connections.
+- Communicating with TCP/UDP services.
+- Debugging network applications.
+
+---
+
+## Client-Server Communication
+
+This level demonstrates the basic client-server model:
+
+Client:
+- The tool used to connect (telnet or nc).
+
+Server:
+- The program running on port 30000.
+
+The client sends data, and the server processes the request and sends back a response.
+

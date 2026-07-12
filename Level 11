@@ -1,0 +1,32 @@
+# The objective - 
+- To find the password for LEVEL12.  The password is stored in the file data.txt, but the contents of the file have been encrypted using a simple character rotation technique called ROT13.
+The goal is to decode the text and retrieve the original password.
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- cat data.txt
+- tr 'A-Za-z' 'N-ZA-Mn-za-m' < data.txt
+[
+- tr → A Linux command used to translate or replace characters.
+- 'A-Za-z' → Specifies all uppercase and lowercase English letters as the characters to transform.
+- 'N-ZA-Mn-za-m' → Specifies the ROT13 character mapping.
+- < data.txt → Redirects the contents of data.txt as input to the command.
+]
+
+# Why your solution worked - 
+- First i read the data.txt file using cat command , the password for next level was in ROT13 encodeed format.
+-  The file contents were not encrypted using a complex encryption algorithm. They were transformed using ROT13, which replaces each letter with the letter 13 positions after it in the alphabet.
+- Since ROT13 is a reversible substitution:
+    Applying ROT13 once encrypts the text.
+    Applying ROT13 again returns the original text.
+- The tr command was used to reverse this character substitution and recover the password.
+- The tr 'A-Za-z' 'N-ZA-Mn-za-m' < data.txt command converts the ROT13 text back into readable text, revealing the password.
+
+
+# Key Linux concepts or commands you learned - 
+- ROT13 (Rotate by 13 places) is a simple substitution cipher where each letter is replaced by the letter halfway around the alphabet.
+- Because the alphabet has 26 letters, applying ROT13 twice returns the original text.
+- tr stands for translate. It is used to replace, modify, or delete characters from input.
+General syntax: tr 'set1' 'set2'
+Characters in set1 are replaced by the corresponding characters in set2.
+- Input Redirection (<) : The < operator sends the contents of a file as input to a command.

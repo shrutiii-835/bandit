@@ -1,0 +1,18 @@
+# The objective - 
+- To find the password for LEVEL10. The password is stored in the file data.txt. However, the file contains mostly unreadable binary data, and the password is stored as a human-readable string inside it.
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- ls
+- file data.txt
+- strings data.txt
+
+
+# Why your solution worked - 
+-  First, I checked the files available in the directory: ls
+- checked the file typr using file command.
+- The file was not a normal text file, so using commands like: cat data.txt would display unreadable characters because the file contained binary data. The strings command scans the file and extracts only sequences of human-readable characters. Since the password was stored as readable text inside the binary file, strings allowed it to be found easily.
+
+
+# Key Linux concepts or commands you learned - 
+- strings extracts human readable text from binary files.

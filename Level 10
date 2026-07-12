@@ -1,0 +1,19 @@
+# The objective - 
+- To find the password for LEVEL11.  The password is stored in the file data.txt, but the file contents are Base64 encoded.
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- cat data.txt
+- base64 -d data.txt. (-d stands for decoding the input)
+
+# Why your solution worked - 
+- First i read the data.txt file using cat command , the password for next level was in an emcodeed format.
+-  The file contained encoded text rather than the actual password. Base64 encoding converts binary or text data into a format containing readable characters.
+- Since Base64 is an encoding method and not encryption, the original content can be recovered using the decoding option.
+- base64 -d data.txt reversed the encoding process and revealed the password.
+
+
+# Key Linux concepts or commands you learned - 
+- Encoding transforms data into another format so it can be stored or transmitted easily.
+- Base64 is a method of representing data using a limited set of ASCII characters
+- base64 -d data.txt Decodes the Base64 encoded content and converts it back into readable text.

@@ -1,0 +1,60 @@
+# The objective - 
+- To find the password for LEVEL13.  The password is stored in the file data.txt, but the file has been compressed multiple times using different compression formats.
+The goal is to identify the compression type at each step, decompress the file repeatedly, and finally retrieve the password.
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- ls
+- file data.txt (This tells us which decompression tool to use.)
+- Commands Used for Different Compression Types
+1. Gzip Files
+If file shows:
+gzip compressed data
+Use:
+mv data.txt data.gz
+gzip -d data.gz
+Explanation:
+mv renames the file to include the correct extension.
+gzip -d decompresses gzip files.
+2. Bzip2 Files
+If the file is identified as:
+bzip2 compressed data
+Use:
+mv data data.bz2
+bzip2 -d data.bz2
+Explanation:
+bzip2 -d decompresses bzip2 files.
+3. Tar Archives
+If the file is identified as:
+POSIX tar archive
+Use:
+tar -xf data.tar
+Explanation:
+tar extracts archive files.
+-x → extract.
+-f → specify the archive file.
+
+# Why your solution worked - 
+- Since the file has no meaningful extension, the file command helps identify its format.
+-  Decompression Process
+The file is compressed multiple times, so the process is repeated:
+   - Check the file type using file.
+   - Rename the file with the correct extension.
+   - Decompress it.
+   - Repeat until reaching readable text.
+- The file was not a single compressed file. It was a compressed file that had been repeatedly compressed using different formats.The file command was essential because the filename did not reveal the compression type. By checking the file type after every extraction, I could determine the correct decompression command to use.This process continued until the file became a normal text file containing the password.
+
+
+# Key Linux concepts or commands you learned - 
+- file identifies the actual format of a file by examining its contents.
+- compression reduces the size of the data. examples: gzip, bzip2.
+- archiving combines multiple files into one file. example: tar
+- mv is used to move or rename files
+- gzip -d Decompresses gzip files.
+- bzip2 -d Decompresses bzip2 files.
+- tar is Used to create and extract archive files.
+    Options:
+-x → Extract files.
+-f → Use the specified archive file.
+
+
