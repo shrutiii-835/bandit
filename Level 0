@@ -1,0 +1,21 @@
+# The objective - 
+- To log into the game using SSH using the given username, hostname, port and password and find the password for LEVEL1
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- pwd
+- ls
+- cat 
+
+# Why your solution worked - 
+- ssh(secure shell) establisheed a secure connection to the remote linux serverused 
+- pwd command to check if the current directory is the home directory
+- ls command to list all the files in the home directory 
+- cat to read the "readme" file which had the password for Level1
+
+# Key Linux concepts or commands you learned - 
+- how to remotely connect tot linux machine using ssh
+- check current working directory and list all the files in it using pwd and ls command respectively
+- to read files using cat command 
+
+password for level 2 - 6y2kwnwK6grgvwvpvLaa2T1cpFEKOhNR

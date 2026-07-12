@@ -1,0 +1,31 @@
+# The objective - 
+- To find the password for LEVEL9. The password is stored in a file called data.txt in the home directory. The password is the only line in the file that appears only once.
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- ls
+- cat data.txt
+- sort data.txt | uniq -u
+
+
+# Why your solution worked - 
+-  First, I checked the files available in the directory: ls
+- On reading the file using the cat command, i found that data.txt file had many lines of text, but manually finding the unique line would be inefficient.
+- sort data.txt - Sorts all lines in the file alphabetically. This is required because uniq only detects duplicate lines that are next to each other. Sorting groups identical lines together.
+- The pipe operator sends the output of one command as input to another command.
+- uniq is used to detect or remove repeated lines from text.
+    uniq → Removes consecutive duplicate lines and prints only one copy of each repeated line.
+    uniq -c → Counts how many times each line appears.
+    uniq -u → Displays only lines that appear once.
+- sort data.txt | uniq -u  allowed me to Arrange identical lines together using sort. Filter out repeated lines and display only the unique line using uniq -u. The remaining line was the password for Bandit Level 8.
+
+
+# Key Linux concepts or commands you learned - 
+- sort arranges lines of text in a specific order, usually alphabetically.
+It is often used before commands like uniq because duplicate detection requires identical lines to be adjacent.
+- uniq is used to detect or remove repeated lines from text.
+Common options:
+uniq → Removes consecutive duplicate lines.
+uniq -c → Counts how many times each line appears.
+uniq -u → Displays only lines that appear once.
+- The pipe operator connects commands together by passing the output of one command into another.

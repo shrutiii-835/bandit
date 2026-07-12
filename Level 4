@@ -1,0 +1,20 @@
+# The objective - 
+- To find the password for the next level - Unlike the previous levels, the password was not stored in a file with a tricky name. Instead, it was hidden among several files inside the inhere directory, and only one of those files contained human-readable text. The task was to identify the correct file and read its contents.
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- ls
+- cd inhere
+- ls -la 
+-  file ./* (./ for those file whose names began with special characters, if any and * to get the file type of all the files in the pwd)
+- cat ./-file07
+
+# Why your solution worked - 
+-  i switched to the inhere directory first using the cd command, then i accessed the list of all files, and checked the  fle type of all the files using file ./* command. It was able to distinguish between binary files and the one containing plain text, it showed -file07 contained ASCII text(human readable), so i read i using the cat command. 
+
+# Key Linux concepts or commands you learned - 
+- Understood that a file's name or extension does not determine its contents and The file command examines the contents of a file rather than relying on its name or extension.
+- Understood the difference between binary files and human-readable (ASCII text) files.
+- Learnt the ls -la shows all files (including hidden ones) along with detailed information about each file 
+
+ 

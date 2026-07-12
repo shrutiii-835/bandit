@@ -1,0 +1,18 @@
+# The objective - 
+- To find the password for LEVEL2 which was stored in an unusual file named - (dashed file)
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- pwd
+- ls
+- cat ./-    (./ is used to specify that we are looking fir the file the cwd )
+
+# Why your solution worked - 
+-  cat - did not work because linux interprets a single hyphen as a flag used to specify some option, so instead we used cat ./ in order to specify the file name as a path so that linux could understand that we want to read the dashed file present in the current working directory.
+
+# Key Linux concepts or commands you learned - 
+- how there can be special character / symbols present in the names of files, and can lead to exceptional behaviour.
+- the ./ prefix refers to the current working directory and helps distinguish filenames from command options.
+- Commands may treat certain characters as special unless the path is specified explicitly.
+
+ 

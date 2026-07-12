@@ -1,0 +1,37 @@
+# The objective - 
+- Find the password for Bandit Level 7 by locating a file somewhere on the server with the following conditions:
+Owned by user bandit7
+Owned by group bandit6
+Exactly 33 bytes in size
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- pwd
+- ls
+- find / -user bandit7 -group bandit6 -size 33c   
+[
+- / → Starts the search from the root directory, meaning it searches across the entire filesystem.
+- -user bandit7 → Finds files whose owner is the user bandit7.
+- -group bandit6 → Finds files that belong to the group bandit6.
+- -size 33c → Finds files that are exactly 33 bytes in size, c represents bytes.
+] 
+- find / -user bandit7 -group bandit6 -size 33c 2>/dev/null
+[
+- 2 → Represents standard error output (error messages).
+- > → Redirects the output.
+- /dev/null → A special file that discards anything written to it.
+]
+- cat /var/lib/dpkg/info/bandit7.password
+
+# Why your solution worked - 
+-  Unlike the previous level, the file is not located inside the current directory, so the search needed to be performed from the root directory (/) instead of the cwd(.)
+- After running the find command initially without 2>/dev/null, I noticed many Permission denied messages because my current user did not have access to certain system directories.
+- I then understood that 2>/dev/null is used to hide these error messages and display only the useful results.
+- 2>/dev/null means "ignore error messages." The command still searches in the same way; it only makes the output cleaner. 
+- By combining the given info such as file ownership (-user and -group) and file size (-size)the search was narrowed down to the single file containing the password.
+
+# Key Linux concepts or commands you learned - 
+- find / searches the entire filesystem.
+- The -user and -group options allow searching files based on these ownership details.
+- When searching the entire filesystem, permission errors are common because some directories are restricted.
+- Redirecting Errors using (2>/dev/null) helps remove unnecessary messages and makes the output easier to read.

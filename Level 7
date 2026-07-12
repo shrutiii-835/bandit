@@ -1,0 +1,21 @@
+# The objective - 
+- To find the password for LEVEL8 which was stored inside the file data.txt. The password is located on the same line as the word millionth.
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- ls
+- grep "millionth" ./data.txt 
+[ 
+- grep → A command used to search for specific text patterns inside files.
+- "millionth" → The word or pattern being searched for.
+- data.txt → The file where the search is performed.
+]
+
+
+# Why your solution worked - 
+-  First, I checked the files available in the directory: ls
+- The challenge provided a specific keyword (millionth). Using grep,command  I was able to quickly locate the exact line containing the keyword without manually reading through the entire file.
+- The password was stored next to the word millionth, so the output of the grep command directly revealed the password for the next level.
+
+# Key Linux concepts or commands you learned - 
+- Grep command scans text from a file and prints the LINE that matches the given pattern 

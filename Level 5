@@ -1,0 +1,49 @@
+# The objective - 
+- The goal of this level was to find the password for Bandit Level 6. The password was stored in a file inside the inhere directory, but instead of searching by filename, I had to identify the correct file based on three conditions:
+It had to be human-readable.
+It had to be exactly 1033 bytes in size.
+It had to be non-executable.
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- ls
+- cd inhere
+- find . -type f -size 1033c ! -executable 
+[ - . tells find to start searching from the current directory.
+  - type f limits the search to regular files only.
+  - size 1033c looks for files that are exactly 1033 bytes in size (c stands for bytes).
+  - ! -executable excludes any files that have execute permission for the current user.]  
+-  file ./* (./ for those file whose names began with special characters, if any and * to get the file type of all the files in the pwd)
+- file ./maybehere07/.file2
+-  cat ./maybehere07/.file2
+
+# Why your solution worked - 
+-  Instead of relying on filenames, this level required searching based on file attributes. By combining multiple filters in a single find command, I was able to identify the only file that matched all the given conditions:
+It was a regular file.
+Its size was exactly 1033 bytes.
+It was not executable.
+
+- find is a powerful command used to locate files and directories based on various properties such as their name, size, type, permissions, owner, or modification time. It is one of the most commonly used commands for searching files in Linux.
+- -type f : Restricts the search to regular files only, excluding directories, symbolic links, and other file types.
+- -size 1033c - Searches for files that are exactly 1033 bytes in size. 
+- Common size suffixes include:
+    c – bytes
+    k – kilobytes
+    M – megabytes
+    G – gigabytes
+
+- The ! operator is the logical NOT operator. It reverses the condition that follows it.
+For example: ! -executable 
+means "find files that are not executable."
+- -executable : Matches files that have execute permission for the current user. Combining it with ! allows us to exclude executable files from the search.
+- file <filename> command Determines the actual type of a file by examining its contents rather than relying on its filename or extension. This is useful for distinguishing between text files, binary files, executables, images, and many other file types.
+
+
+# Key Linux concepts or commands you learned - 
+- Learned how to search for files based on their properties rather than their names.
+- Understood how multiple conditions can be combined in a single find command to precisely locate a file.
+- Learned that file size can be specified in different units, with c representing bytes.
+- Understood the purpose of the logical NOT (!) operator and how it can be used to exclude files that match a particular condition.
+- Learned that execute permission determines whether a file can be run as a program or script, and how -executable checks for that permission.
+- Realised the importance of verifying a file's type using file before opening it, since a filename or extension does not necessarily indicate what the file actually contains.
+- also explored other options that can be used with the find command like -name, -size, -perm, etc.

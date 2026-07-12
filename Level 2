@@ -1,0 +1,24 @@
+# The objective - 
+- To find the password for LEVEL3 which was stored in a file named --spaces in this filename-- located in the home directory
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- pwd
+- ls
+- cat -- "--spaces in this filename--"   (everything after -- is a filename, even if it starts with -)
+- cat "./--spaces in this filename--"     (alternate to the above command, ./ can be used along with the filename to specify it as a path)
+
+# Why your solution worked - 
+-  First, I checked the files available in the directory: ls
+- The output showed a file with spaces in its name.
+- Initially, I tried accessing it normally: cat --spaces in this filename--, but it did not work because the shell interpreted each word as a separate argument. I then used quotes to treat the complete filename as a single argument:
+cat "--spaces in this filename--". Then I learned that if a filename starts with -, commands may interpret it as an option. In such cases, the file can be accessed using: cat -- "--spaces in this filename--" (everything after -- is a filename, even if it starts with -); or: cat "./--spaces in this filename--" (./ can be used along with the filename to specify it as a path)
+- The solution worked because by default, spaces indicate that a new argument is starting, so a filename containing spaces gets split into multiple parts. Using quotes tells the shell that everything inside the quotes belongs to one single filename. Similarly, using -- tells the command that option parsing has ended and whatever comes after it should be treated as a filename, even if it starts with a dash.
+
+# Key Linux concepts or commands you learned - 
+- spaces in filenames need special handling using quotes (" ") or backslash (\).
+- the ./ prefix refers to the current working directory and helps distinguish filenames from command options.
+- filenames beginning with - can be mistaken for command options.
+-  -- is used to stop option parsing in Linux commands, and interprets anything after that aas a filename. 
+- Understood the difference between a filename and a command option, and how paths like ./filename remove ambiguity.
+

@@ -1,0 +1,19 @@
+# The objective - 
+- To find the password for LEVEL2 which was stored in a hidden file in the inhere directory.
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- pwd
+- ls
+- cd
+- ls -a
+-  cat -- "...Hiding-From-You"   
+
+# Why your solution worked - 
+-  i switched to the inhere directory first using the cd command, then i accessed the list of hidden file using ls -a ad read the file using cat command. 
+
+# Key Linux concepts or commands you learned - 
+- how there can be special character / symbols present in the names of files, and can lead to exceptional behaviour.
+- List of Hidden files can be seen using ls -a. 
+
+ 
