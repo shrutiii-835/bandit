@@ -1,0 +1,61 @@
+# The Objective
+
+* To find the password for Level 16. The password is obtained by submitting the current level's password to a service running on `localhost` port `30001` using an SSL/TLS encrypted connection.
+
+* Unlike the previous level, where a normal TCP connection was used, this level requires communication through an encrypted channel.
+
+
+# The Commands You Used
+
+* `cat /etc/bandit_pass/bandit15`
+
+Purpose: Displays the password of the current user (`bandit15`), which needs to be submitted to the service running on port `30001`.
+
+
+* `openssl s_client -connect localhost:30001`
+
+Purpose: Creates a secure SSL/TLS connection to the service running on port `30001`.
+
+Breakdown:
+
+* `openssl` → A command-line tool used for cryptography and SSL/TLS operations.
+* `s_client` → Starts an SSL client that can connect to SSL/TLS enabled services.
+* `-connect` → Specifies the server and port to connect to.
+* `localhost:30001` → Connects to the service running on port `30001` on the same machine.
+After the TLS connection is established, the current password is entered into the connection.
+
+
+# Why Your Solution Worked
+
+* The service in this level does not accept normal TCP connections because it requires SSL/TLS encryption.
+
+* A normal tool like `nc` only creates a TCP connection, but it does not perform the SSL/TLS handshake required by the server.
+
+* The `openssl s_client` command creates an encrypted connection by performing the TLS handshake with the service.
+
+* After establishing the secure connection, submitting the current password allows the service to verify it and return the password for the next level.
+
+# Key Linux Concepts or Commands You Learned
+
+* **SSL/TLS** provides secure communication over a network by encrypting data and verifying the identity of the communicating parties.
+
+* **TCP** provides reliable data transfer, but it does not encrypt the data. TLS is added on top of TCP to provide security.
+
+* **openssl** is a command-line utility used for encryption, certificate management, and testing secure connections.
+
+* **s_client** is an OpenSSL feature that acts as a client for SSL/TLS connections.
+
+* **Port** identifies a specific service running on a machine.
+
+Example:
+
+`localhost:30001`
+
+means:
+
+* `localhost` → The current machine.
+
+* `30001` → The port where the service is running.
+
+* **TLS Handshake** is the process where the client and server establish an encrypted connection before exchanging data.
+

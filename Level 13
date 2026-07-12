@@ -1,0 +1,50 @@
+# The objective - 
+- To find the password for LEVEL14.
+The password for the next level is stored in the file:
+/etc/bandit_pass/bandit14
+However, the current user (bandit13) does not have direct access to this file.
+The level provides an SSH private key that can be used to log in as the next user (bandit14). After successfully switching to the bandit14 user, the password can be accessed from the password file.
+
+
+# The commands you used - 
+- ssh udername@hostname -p <port>
+- ls
+- scp -P 2220 bandit13@bandit.labs.overthewire.org:~/sshkey.private .  (on local terminal)
+[
+    - scp → Securely copies files between machines using SSH.
+    - -P 2220 → Specifies the SSH port.
+    - bandit13@bandit.labs.overthewire.org → The remote user and server.
+    - :~/sshkey.private → The location of the private key on the remote server.
+    - . → Saves the file in the current directory on the local machine.
+]
+- chmod 600 sshkey.private      (on loal terminal)
+- ssh -i sshkey.private bandit14@bandit.labs.overthewire.org -p 2220     (on local terminal)
+    [ 
+    - ssh → Secure Shell command used to connect to another machine.
+    - -i sshkey.private → Specifies the private key file to use for authentication.
+    - bandit14@bandit.labs.overthewire.org → The user and remote server to connect to.
+    - -p → Specifies the SSH port.
+]
+- cat /etc/bandit_pass/bandit14     (on local terminal)
+
+# Why your solution worked - 
+- The password file belonged to the bandit14 user, so the bandit13 user could not read it directly because of Linux file permissions.
+- Instead of using password-based authentication, this level introduced SSH key-based authentication. The provided private key matched the public key stored for the bandit14 account on the server.
+- Since SSH connections from localhost are now blocked on the Bandit server, the private key had to be copied to the local machine using scp.
+- After securing the private key using chmod 600, SSH was able to use it for authentication, allowing me to log in as bandit14.
+- Once authenticated as bandit14, I had permission to read /etc/bandit_pass/bandit14, which contained the password for the next level.
+
+
+# Key Linux concepts or commands you learned - 
+- SSH (Secure Shell) is a protocol used to securely connect to remote Linux machines over a network.
+- SSH Key Authentication allows users to authenticate using a pair of cryptographic keys instead of a password.
+    - Private Key → Kept secret by the user and used to prove identity.
+    - Public Key → Stored on the server and used to verify the matching private key.
+- scp (Secure Copy Protocol) is used to securely transfer files between a local machine and a remote machine using SSH.
+- Local Machine is the computer from which commands are executed.
+- Remote Machine is the computer being connected to over SSH.
+- Remote Path follows the format username@hostname:path, where everything after the colon (:) represents the file path on the remote machine.
+- . (Current Directory) represents the current working directory. In the scp command, it specifies where the copied file should be saved on the local machine.
+- chmod 600 changes the permissions of a file so that only its owner can read and write it. SSH requires private keys to have restricted permissions for security.
+- Linux File Permissions prevent one user from accessing another user's files unless they have the required permissions or authenticate as that user.
+
