@@ -1,0 +1,46 @@
+# The Objective
+
+* To find the password for **Level 18**. The password is stored in the file `readme` in the home directory, but it is the **only line that has changed** between the files `/etc/bandit_pass/bandit17` and `/etc/bandit_pass/bandit18`.
+
+---
+
+# The Commands You Used
+* ls
+* `diff passwords.new passwords.old
+
+  Purpose: Compares the two files line by line and displays only the differences.
+
+  Breakdown:
+
+  * `diff` → Compares the contents of two files.
+  * `passwords.new` → The first file to compare.
+  * `passwords.old` → The second file to compare.
+
+  The output contains the line that differs, which is the password for the next level.
+
+---
+
+# Why Your Solution Worked
+
+* Both password files were almost identical except for one line.
+* The `diff` command compared the files and displayed only the changed line instead of showing the entire contents.
+* The new line in `passwords.new` was the password required for the next level.
+
+---
+
+# Key Linux Concepts or Commands You Learned
+
+* **diff** compares two files and highlights the differences between them.
+
+* `diff file1 file2` compares the contents of `file1` and `file2` line by line.
+
+* In the output:
+
+  * `<` indicates a line from the first file.
+  * `>` indicates a line from the second file.
+  * `c` means the line was **changed**.
+
+* `diff` is commonly used to compare configuration files, source code, and text documents to identify changes.
+
+---
+

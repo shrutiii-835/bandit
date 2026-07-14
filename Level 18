@@ -1,0 +1,41 @@
+# The Objective
+
+* To find the password for **Level 19**. The password is stored in the file `readme` in the home directory, but the `.bashrc` file has been modified to automatically log you out whenever you log in via SSH. The goal is to bypass the interactive shell and directly execute a command while logging in.
+
+---
+
+# The Commands You Used
+
+* `ssh bandit18@bandit.labs.overthewire.org -p 2220 cat readme`
+
+  Purpose: Logs in as `bandit18` and immediately executes the `cat readme` command instead of starting an interactive shell.
+
+  Breakdown:
+
+  * `ssh` → Connects to the remote machine.
+  * `bandit18@bandit.labs.overthewire.org` → The user and remote server.
+  * `-p 2220` → Specifies the SSH port.
+  * `cat readme` → The command executed directly on the remote machine after authentication.
+
+---
+
+# Why Your Solution Worked
+
+* Normally, logging in starts an interactive shell, which reads the modified `.bashrc` file and immediately logs the user out.
+* By providing a command directly to `ssh`, no interactive shell was started, so the logout command in `.bashrc` was bypassed.
+* The `cat readme` command executed successfully, asked for the current level's password and displayed the password for the next level.
+
+---
+
+# Key Linux Concepts or Commands You Learned
+
+* **`.bashrc`** is a shell configuration file that is executed whenever an interactive Bash shell starts.
+
+* **SSH Remote Command Execution** allows a command to be executed immediately after logging in without opening an interactive shell.
+
+* **`ssh user@host command`** runs the specified command on the remote machine and then closes the connection after the command finishes.
+
+* **Interactive Shell** is a shell where the user enters commands manually. Startup files like `.bashrc` are typically executed when an interactive shell begins.
+
+---
+

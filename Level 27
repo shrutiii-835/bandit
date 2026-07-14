@@ -1,0 +1,165 @@
+## Objective
+
+The goal of this level was to obtain the password for Bandit Level 28.
+
+Unlike the previous levels, the password was not hidden in the filesystem. Instead, it was stored inside a Git repository. The task was to clone the repository, inspect its contents, and locate the password.
+
+---
+
+## Commands Used
+
+### 1. Creating a temporary working directory
+
+Commands:
+
+cd /tmp
+mkdir bandit27
+cd bandit27
+
+Purpose:
+
+A temporary working directory was created inside `/tmp` to safely clone the repository without modifying the home directory.
+
+---
+
+### 2. Cloning the Git repository
+
+Command:
+
+git clone ssh://bandit27-git@localhost:2220/home/bandit27-git/repo
+
+Purpose:
+
+This command created a local copy (clone) of the remote Git repository.
+
+During authentication, the password used was the Bandit27 password obtained in the previous level.
+
+After cloning, a new directory named `repo` was created containing the repository files.
+
+---
+
+### 3. Entering the repository
+
+Command:
+
+cd repo
+
+Purpose:
+
+Changed the current working directory to the cloned repository so its files could be inspected.
+
+---
+
+### 4. Listing the repository contents
+
+Command:
+
+ls -la
+
+Purpose:
+
+Displayed all files in the repository, including hidden files such as the `.git` directory.
+
+The repository contained a `README` file.
+
+---
+
+### 5. Reading the README
+
+Command:
+
+cat README
+
+Purpose:
+
+The README file contained the password for Bandit Level 28.
+
+Reading the file completed the level.
+
+---
+
+## Why the Solution Worked
+
+This level introduced Git repositories.
+
+Instead of storing the password somewhere in the Linux filesystem, it was placed inside a version-controlled repository.
+
+By cloning the repository, a complete local copy of all tracked files was downloaded.
+
+Once inside the repository, reading the README revealed the password for the next level.
+
+---
+
+## Linux Concepts / Commands Learned
+
+### 1. Git
+
+Git is a distributed version control system used to track changes in files and collaborate on software projects.
+
+It allows developers to maintain a complete history of changes made to a project.
+
+---
+
+### 2. Git Repository
+
+A Git repository is a directory that contains:
+
+- Project files
+- Version history
+- Configuration data
+
+Every Git repository contains a hidden directory named:
+
+.git
+
+which stores all version control information.
+
+---
+
+### 3. Cloning a Repository
+
+Command:
+
+git clone <repository_url>
+
+Purpose:
+
+Downloads a complete copy of a remote repository onto the local machine.
+
+The cloned repository contains all tracked files and commit history.
+
+---
+
+### 4. SSH Authentication with Git
+
+Instead of using HTTPS, this repository was accessed over SSH.
+
+Authentication used the current Bandit password, allowing secure access to the repository.
+
+---
+
+### 5. Hidden Files
+
+The command:
+
+ls -la
+
+was used to display hidden files such as:
+
+.git
+
+The `.git` directory is what makes a directory a Git repository.
+
+---
+
+## Summary
+
+This level introduced the basics of Git by requiring a repository to be cloned over SSH. After cloning the repository, I inspected its contents and found the password inside the README file.
+
+Key concepts learned:
+
+- Git repositories
+- Cloning repositories with `git clone`
+- SSH authentication with Git
+- Hidden `.git` directories
+- Basic repository navigation

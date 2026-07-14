@@ -1,0 +1,304 @@
+## Objective
+
+The goal of this level was to find the password for Bandit Level 25.
+
+In this level, a service (daemon) was running on localhost port 30002. The service required two inputs:
+
+1. The current level password (Bandit24 password).
+2. A 4-digit PIN code.
+
+The password was already known, but the PIN was unknown. Since the PIN could be any value between 0000 and 9999, the challenge was to automate trying all possible combinations instead of entering them manually.
+
+The objective was to create a script that:
+
+1. Generated all possible 4-digit PIN combinations.
+2. Combined each PIN with the current password.
+3. Sent all possible combinations to the daemon.
+4. Identified the correct PIN when the service returned the password for the next level.
+
+
+## Commands Used
+
+### 1. Connecting to the daemon manually
+
+Command:
+
+nc localhost 30002
+
+Purpose:
+
+This command was used to connect to the service running on port 30002.
+
+It helped verify how the daemon worked and what format of input it expected.
+
+The service required input in the format:
+
+<bandit24_password> <PIN>
+
+If the PIN was incorrect, it returned an error message. This confirmed that the service was working and that automation was required.
+
+
+### 2. Storing the current password in a variable
+
+Command:
+
+password=$(cat /etc/bandit_pass/bandit24)
+
+Purpose:
+
+This stored the current level password inside a Bash variable.
+
+Instead of manually typing the password for every attempt, the script could reuse the stored value automatically.
+
+
+### 3. Generating PIN combinations
+
+Command:
+
+seq -w 0 9999
+
+Purpose:
+
+This generated all possible 4-digit PIN values.
+
+The `-w` option ensures that numbers are padded with leading zeros.
+
+Without `-w`:
+
+0
+1
+2
+
+With `-w`:
+
+0000
+0001
+0002
+
+This was required because the daemon expected exactly four digits.
+
+
+### 4. Creating a brute-force script
+
+Command:
+
+nano brute.sh
+
+Script:
+
+#!/bin/bash
+
+password=$(cat /etc/bandit_pass/bandit24)
+
+for pin in $(seq -w 0 9999)
+do
+    echo "$password $pin"
+done | nc localhost 30002
+
+
+Purpose:
+
+The script automatically generated and tested all possible PIN combinations.
+
+The loop created inputs like:
+
+password 0000
+password 0001
+password 0002
+...
+password 9999
+
+These values were sent directly to the daemon using Netcat.
+
+
+### 5. Making the script executable
+
+Command:
+
+chmod +x brute.sh
+
+Purpose:
+
+Linux requires execute permission before a script can be run directly.
+
+The command added execute permission to the file.
+
+
+### 6. Running the brute-force script
+
+Command:
+
+./brute.sh
+
+Purpose:
+
+This executed the script and started testing all 10,000 possible PIN combinations.
+
+When the correct PIN was found, the daemon returned the password for the next level.
+
+
+## Why the Solution Worked
+
+The main concept behind this level was automation through scripting.
+
+Manually testing 10,000 PIN combinations would be inefficient, so a Bash script was created to perform the task automatically.
+
+The solution worked because:
+
+1. The current password was stored in a variable.
+2. The `seq` command generated every possible 4-digit PIN.
+3. A loop combined the password with each PIN.
+4. The generated combinations were sent to the daemon using Netcat.
+5. The daemon checked each attempt and responded when the correct PIN was found.
+
+The communication flow was:
+
+Bash Script
+
+↓
+
+Generates:
+
+password 0000  
+password 0001  
+password 0002  
+...  
+password 9999  
+
+↓
+
+Netcat sends data
+
+↓
+
+localhost:30002 daemon
+
+↓
+
+Checks credentials
+
+↓
+
+Returns Bandit25 password
+
+
+This level demonstrated how repetitive tasks can be automated using scripts instead of performing them manually.
+
+
+## Linux Concepts / Commands Learned
+
+### 1. Daemons
+
+A daemon is a background process that continuously runs and provides a service.
+
+Examples:
+
+- SSH server
+- Web servers
+- Database servers
+
+In this level, the daemon was listening on:
+
+localhost:30002
+
+and waiting for a client connection.
+
+
+### 2. Netcat (`nc`)
+
+Netcat is a networking tool used to create TCP/UDP connections.
+
+Client mode:
+
+nc localhost 30002
+
+connects to a service running on a specific port.
+
+It can also be used to send and receive data manually during debugging.
+
+
+### 3. Brute Force Automation
+
+Brute force means systematically trying all possible combinations until the correct one is found.
+
+In this level:
+
+- Possible PINs: 0000 to 9999
+- Total attempts: 10,000
+
+A script was used to automate these attempts.
+
+
+### 4. Bash Loops
+
+A `for` loop allows repeating commands for multiple values.
+
+Example:
+
+for item in list
+do
+    command
+done
+
+In this level, the loop was used to test every possible PIN.
+
+
+### 5. Command Substitution
+
+Command substitution allows the output of a command to be used inside another command.
+
+Syntax:
+
+$(command)
+
+Example:
+
+password=$(cat /etc/bandit_pass/bandit24)
+
+The output of `cat` was stored inside the variable `password`.
+
+
+### 6. Pipes (`|`)
+
+The pipe operator sends the output of one command as input to another command.
+
+Example:
+
+command1 | command2
+
+In this level:
+
+done | nc localhost 30002
+
+sent the generated password and PIN combinations directly to the daemon.
+
+
+### 7. Script Permissions
+
+Linux controls whether files can be executed through permissions.
+
+The command:
+
+chmod +x script.sh
+
+adds execute permission, allowing the script to run as a program.
+
+
+## Summary
+
+This level introduced automation and scripting for solving repetitive tasks.
+
+Instead of manually trying 10,000 possible PIN combinations, a Bash script was created to generate all combinations and send them to the daemon automatically.
+
+The main concepts learned were:
+
+- Client-server communication.
+- Daemons and network services.
+- Netcat usage.
+- Bash scripting.
+- Loops.
+- Command substitution.
+- Pipes.
+- Automating brute-force processes.
+
+This level was an important introduction to using scripting for automation, which is a fundamental skill in Linux administration and DevOps.

@@ -1,0 +1,190 @@
+## Objective
+
+The goal of this level was to obtain the password for Bandit Level 31.
+
+The password was not stored in the repository files or commit history. Instead, it was stored as a Git tag. The objective was to inspect the repository for tags, identify the available tag, and display its contents to retrieve the password.
+
+---
+
+## Commands Used
+
+### 1. Creating a temporary working directory
+
+Commands:
+
+cd /tmp
+mkdir bandit30
+cd bandit30
+
+Purpose:
+
+A temporary workspace was created inside `/tmp` to safely clone the repository without affecting other files.
+
+---
+
+### 2. Cloning the Git repository
+
+Command:
+
+git clone ssh://bandit30-git@localhost:2220/home/bandit30-git/repo
+
+Purpose:
+
+This command downloaded a complete copy of the remote Git repository, including all commits, branches, and tags.
+
+Authentication was performed using the Bandit30 password.
+
+---
+
+### 3. Entering the repository
+
+Command:
+
+cd repo
+
+Purpose:
+
+Changed the current working directory to the cloned repository so its contents could be explored.
+
+---
+
+### 4. Listing the repository contents
+
+Command:
+
+ls -la
+
+Purpose:
+
+Displayed the files present in the repository.
+
+Unlike previous levels, no file contained the password, indicating that the information was stored elsewhere in the repository.
+
+---
+
+### 5. Listing all Git tags
+
+Command:
+
+git tag
+
+Purpose:
+
+Displayed all tags present in the repository.
+
+The output showed a tag named:
+
+secret
+
+This indicated that the password was likely stored within that tag.
+
+---
+
+### 6. Viewing the contents of the tag
+
+Command:
+
+git show secret
+
+Purpose:
+
+Displayed the object associated with the `secret` tag.
+
+The output contained the password for Bandit Level 31.
+
+---
+
+## Why the Solution Worked
+
+Git repositories can contain tags in addition to commits and branches.
+
+A tag is a permanent reference to a specific commit or object and is commonly used to mark important versions such as software releases.
+
+In this level, the password was intentionally stored inside a Git tag rather than in the working directory or commit history.
+
+By listing the available tags using `git tag` and inspecting the `secret` tag with `git show`, the stored password was revealed.
+
+---
+
+## Linux Concepts / Commands Learned
+
+### 1. Git Tags
+
+A Git tag is a named reference that points to a specific commit or object in a repository.
+
+Tags are commonly used to mark important milestones, releases, or versions.
+
+Unlike branches, tags do not move when new commits are added.
+
+---
+
+### 2. `git tag`
+
+Command:
+
+git tag
+
+Purpose:
+
+Lists all tags available in the current repository.
+
+This helps identify important snapshots or named references that may not be visible through branches or commit history.
+
+---
+
+### 3. `git show`
+
+Command:
+
+git show <tag_name>
+
+Purpose:
+
+Displays detailed information about a specific Git object.
+
+When used with a tag, it shows the commit or object referenced by that tag, along with any associated file contents or messages.
+
+---
+
+### 4. Git Objects
+
+Git stores different types of objects, including:
+
+- Commits
+- Trees
+- Blobs (file contents)
+- Tags
+
+Each object has a unique identifier and can be inspected using Git commands such as `git show`.
+
+---
+
+### 5. Tags vs Branches
+
+Branch:
+
+- Represents an active line of development.
+- Moves forward as new commits are added.
+
+Tag:
+
+- Represents a fixed reference.
+- Always points to the same commit or object.
+- Commonly used for releases or important checkpoints.
+
+---
+
+## Summary
+
+This level introduced Git tags and demonstrated that important information can be stored outside the working directory and commit history.
+
+By cloning the repository, listing the available tags with `git tag`, and inspecting the `secret` tag using `git show`, I recovered the password for the next level.
+
+Key concepts learned:
+
+- Git tags
+- Listing tags using `git tag`
+- Viewing tag contents with `git show`
+- Git objects
+- Difference between branches and tags
+- Using tags to reference important points in a repository

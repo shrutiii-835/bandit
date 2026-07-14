@@ -1,0 +1,49 @@
+# The Objective
+
+* To find the password for **Level 20**. A setuid program named `bandit20-do` is available in the home directory. The goal is to use this program to execute a command as the `bandit20` user and read the password stored in `/etc/bandit_pass/bandit20`.
+
+---
+
+# The Commands You Used
+
+* `ls -l`
+
+  Purpose: Lists the files in the current directory and displays their permissions. This helps identify that `bandit20-do` is a setuid executable.
+
+* `./bandit20-do cat /etc/bandit_pass/bandit20`
+
+  Purpose: Executes the `cat` command as the `bandit20` user to read the password file.
+
+  Breakdown:
+
+  * `./bandit20-do` → Runs the setuid program.
+  * `cat` → Displays the contents of a file.
+  * `/etc/bandit_pass/bandit20` → The password file that only `bandit20` can normally read.
+
+---
+
+# Why Your Solution Worked
+
+* The `bandit20-do` program is a **setuid** executable, meaning it runs with the permissions of its owner (`bandit20`) instead of the current user (`bandit19`).
+* Although `bandit19` does not have permission to read `/etc/bandit_pass/bandit20`, the setuid program executes the `cat` command with `bandit20`'s privileges.
+* This allowed the password file to be read successfully.
+
+---
+
+# Key Linux Concepts or Commands You Learned
+
+* **Setuid (Set User ID)** is a special file permission that allows an executable to run with the permissions of its owner rather than the user executing it.
+
+* **`ls -l`** displays file permissions and helps identify setuid files. A setuid executable is indicated by an `s` in the owner's execute permission, for example:
+
+  `-rwsr-x---`
+
+* **`./program`** runs an executable located in the current directory.
+
+* **`cat`** displays the contents of a file.
+
+---
+
+# Takeaway
+
+* This level introduced the concept of **setuid** executables and how they can temporarily grant the permissions of another user. I learned how to identify a setuid program using `ls -l` and use it to execute commands with elevated privileges when permitted.

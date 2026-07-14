@@ -1,0 +1,265 @@
+
+## Objective
+The goal of this level was to gain access to the Bandit26 account and obtain the password for the next level.
+
+A private SSH key for Bandit26 was provided, but logging in normally did not give access to a shell. Instead, the connection immediately closed after displaying some text. The challenge was to understand why this happened and find a way to escape into a usable shell.
+
+---
+
+## Commands Used
+
+### 1. Listing files in the home directory
+
+Command:
+
+ls -la
+
+Purpose:
+
+This command was used to identify useful files in the home directory. It revealed the presence of the private SSH key:
+
+bandit26.sshkey
+
+which would be used for authentication as Bandit26.
+
+---
+
+### 2. Connecting to Bandit26 using the SSH key
+
+Command:
+
+ssh -i bandit26.sshkey bandit26@bandit.labs.overthewire.org -p 2220
+
+Purpose:
+
+This command authenticated as Bandit26 using the provided private key.
+
+Command Breakdown:
+
+- ssh → Starts an SSH connection.
+- -i bandit26.sshkey → Specifies the private key to use.
+- bandit26@bandit.labs.overthewire.org → Connect as user Bandit26.
+- -p 2220 → Connect using Bandit's SSH port.
+
+The login succeeded, but the connection immediately closed.
+
+---
+
+### 3. Inspecting Bandit26's login shell
+
+Command:
+
+cat /etc/passwd | grep bandit26
+
+Purpose:
+
+This command was used to identify the shell assigned to Bandit26.
+
+The output showed that Bandit26 was not using a normal Bash shell. Instead, it was configured to run a custom program:
+
+/usr/bin/showtext
+
+This explained why the session terminated immediately after login.
+
+---
+
+### 4. Understanding the custom shell
+
+Command:
+
+cat /usr/bin/showtext
+
+Purpose:
+
+This command was used to inspect the custom shell script.
+
+The script displayed a text file using the `more` pager and then exited.
+
+Understanding this behavior was the key to solving the level.
+
+---
+
+### 5. Resizing the terminal
+
+Action:
+
+Reduce the terminal height before connecting.
+
+Purpose:
+
+The `more` command only pauses when the content exceeds the available screen space.
+
+By making the terminal window smaller, the displayed text could not fit on one screen, causing `more` to remain active instead of exiting immediately.
+
+---
+
+### 6. Opening the file in vi
+
+Key Press:
+
+v
+
+Purpose:
+
+While inside the `more` pager, pressing `v` opens the displayed file in the `vi` editor.
+
+This provided an opportunity to escape the restricted environment.
+
+---
+
+### 7. Configuring vi to use Bash
+
+Command inside vi:
+
+:set shell=/bin/bash
+
+Purpose:
+
+This changed the shell that vi would use when spawning a command shell.
+
+Instead of using the restricted environment, vi would launch Bash.
+
+---
+
+### 8. Escaping into a shell
+
+Command inside vi:
+
+:shell
+
+Purpose:
+
+This command spawned an interactive Bash shell from inside vi.
+
+This bypassed the restricted login shell and provided normal command execution.
+
+---
+
+### 9. Reading the password
+
+Command:
+
+cat /etc/bandit_pass/bandit26
+
+Purpose:
+
+Once a Bash shell was obtained, this command displayed the password for the next level.
+
+---
+
+## Why the Solution Worked
+
+The key concept in this level was understanding that authentication and shell access are separate things.
+
+The SSH key successfully authenticated as Bandit26, but Bandit26's login shell was configured as:
+
+/usr/bin/showtext
+
+instead of:
+
+/bin/bash
+
+The custom shell displayed a text file using the `more` pager and then exited.
+
+By shrinking the terminal window, `more` was forced to pause. While inside `more`, it was possible to launch `vi` using the `v` shortcut.
+
+The `vi` editor allows users to spawn a shell. By configuring vi to use Bash and executing `:shell`, a normal shell was obtained, bypassing the restrictions imposed by the custom login shell.
+
+This shell provided access to the Bandit26 password file.
+
+---
+
+## Linux Concepts / Commands Learned
+
+### 1. SSH Key Authentication
+
+SSH can authenticate using a private/public key pair instead of passwords.
+
+The private key:
+
+bandit26.sshkey
+
+proved identity and allowed login as Bandit26.
+
+---
+
+### 2. Login Shells
+
+Every Linux user has a shell assigned in `/etc/passwd`.
+
+Common examples:
+
+/bin/bash
+/bin/sh
+/bin/zsh
+
+Bandit26 used:
+
+/usr/bin/showtext
+
+which caused a custom program to run after login.
+
+---
+
+### 3. Restricted Environments
+
+A user may authenticate successfully but still be prevented from accessing a normal shell.
+
+Restricted shells are commonly used to limit user actions.
+
+This level demonstrated how a restricted environment can sometimes be bypassed through unintended functionality.
+
+---
+
+### 4. The `more` Pager
+
+The `more` command is used to view long files one page at a time.
+
+Unlike `cat`, it pauses when the content exceeds the terminal size.
+
+The level relied on this behavior to keep the session active.
+
+---
+
+### 5. Terminal Dimensions
+
+Many terminal programs behave differently depending on the size of the terminal window.
+
+Reducing the terminal height forced `more` to remain active, making the escape possible.
+
+---
+
+### 6. Vi Editor Shell Escape
+
+The `vi` editor can execute shell commands.
+
+Useful commands:
+
+:set shell=/bin/bash
+
+Changes the shell used by vi.
+
+:shell
+
+Launches an interactive shell.
+
+This capability allowed the restricted environment to be bypassed.
+
+---
+
+## Summary
+
+This level focused on understanding the difference between authentication and shell access.
+
+Although the SSH key successfully authenticated as Bandit26, the account used a custom login shell that immediately terminated the session. By analyzing the login shell, understanding how the `more` pager behaved, and using a shell escape through `vi`, it was possible to obtain a normal Bash shell and read the password for the next level.
+
+Key concepts learned:
+
+- SSH key authentication
+- Login shells
+- Restricted environments
+- The `more` pager
+- Terminal sizing effects
+- Shell escapes through `vi`
+- Privilege and access control in Linux
+```

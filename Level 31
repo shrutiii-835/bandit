@@ -1,0 +1,277 @@
+## Objective
+The goal of this level was to obtain the password for Bandit Level 32.
+
+Unlike the previous Git levels, this challenge required making changes to a Git repository and pushing those changes back to the remote repository. A file named `key.txt` was ignored by Git through the `.gitignore` configuration. The objective was to bypass this restriction, commit the required file with the specified content, and push the commit to the remote repository to receive the password for the next level.
+
+---
+
+## Commands Used
+
+### 1. Creating a temporary working directory
+
+Commands:
+
+cd /tmp
+mkdir bandit31
+cd bandit31
+
+Purpose:
+
+Created a temporary workspace to clone and modify the repository without affecting other files.
+
+---
+
+### 2. Cloning the Git repository
+
+Command:
+
+git clone ssh://bandit31-git@localhost:2220/home/bandit31-git/repo
+
+Purpose:
+
+Downloaded a complete copy of the remote Git repository, including all project files and Git metadata.
+
+Authentication was performed using the Bandit31 password.
+
+---
+
+### 3. Entering the repository
+
+Command:
+
+cd repo
+
+Purpose:
+
+Changed the working directory to the cloned repository.
+
+---
+
+### 4. Inspecting the repository
+
+Commands:
+
+ls -la
+
+cat README.md
+
+Purpose:
+
+Listed the repository contents and read the instructions provided in the README.
+
+The README explained that a file named `key.txt` containing the text:
+
+May I come in?
+
+needed to be committed and pushed.
+
+---
+
+### 5. Checking ignored files
+
+Command:
+
+cat .gitignore
+
+Purpose:
+
+Displayed the Git ignore rules.
+
+The file contained an entry that ignored:
+
+key.txt
+
+meaning Git would normally refuse to track that file.
+
+---
+
+### 6. Creating the required file
+
+Command:
+
+echo "May I come in?" > key.txt
+
+Purpose:
+
+Created a new file named `key.txt` containing the exact text required by the challenge.
+
+The `>` operator redirected the output of `echo` into the file.
+
+---
+
+### 7. Forcing Git to track the ignored file
+
+Command:
+
+git add -f key.txt
+
+Purpose:
+
+Normally, `git add` ignores files listed in `.gitignore`.
+
+The `-f` (force) option overrides this behavior and stages the ignored file for the next commit.
+
+---
+
+### 8. Creating a commit
+
+Command:
+
+git commit -m "Add key.txt"
+
+Purpose:
+
+Saved the staged changes as a new Git commit.
+
+The `-m` option specifies the commit message directly from the command line.
+
+---
+
+### 9. Pushing the changes
+
+Command:
+
+git push origin master
+
+Purpose:
+
+Uploaded the new commit to the remote repository.
+
+After the push completed successfully, the remote server validated the submission and displayed the password for Bandit Level 32.
+
+---
+
+## Why the Solution Worked
+
+Git uses the `.gitignore` file to prevent certain files from being tracked.
+
+In this level, the required file (`key.txt`) was intentionally listed in `.gitignore`, preventing it from being added with a normal `git add` command.
+
+Using:
+
+git add -f key.txt
+
+forced Git to stage the ignored file anyway.
+
+After committing and pushing the change, the remote repository verified that the required file existed with the correct contents. Once the validation succeeded, it returned the password for the next level.
+
+---
+
+## Linux Concepts / Commands Learned
+
+### 1. `.gitignore`
+
+The `.gitignore` file tells Git which files or directories should not be tracked.
+
+It is commonly used to exclude:
+
+- Temporary files
+- Build outputs
+- Log files
+- Secrets
+- Configuration files
+
+---
+
+### 2. `git add`
+
+Command:
+
+git add <file>
+
+Purpose:
+
+Stages changes so they can be included in the next commit.
+
+Only staged files become part of a commit.
+
+---
+
+### 3. `git add -f`
+
+Command:
+
+git add -f key.txt
+
+Purpose:
+
+Forces Git to stage a file even if it matches a rule in `.gitignore`.
+
+The `-f` option stands for **force**.
+
+---
+
+### 4. `git commit`
+
+Command:
+
+git commit -m "message"
+
+Purpose:
+
+Creates a new commit containing all staged changes.
+
+Each commit records a snapshot of the repository at that point in time.
+
+---
+
+### 5. `git push`
+
+Command:
+
+git push origin master
+
+Purpose:
+
+Uploads local commits to the remote repository.
+
+- `origin` → Default name of the remote repository.
+- `master` → Branch being pushed.
+
+---
+
+### 6. Output Redirection (`>`)
+
+Command:
+
+echo "May I come in?" > key.txt
+
+Purpose:
+
+Redirects the output of a command into a file.
+
+If the file does not exist, it is created.
+
+If it already exists, its contents are overwritten.
+
+---
+
+### 7. Local vs Remote Repository
+
+Local repository:
+
+The copy stored on your own machine where changes are made.
+
+Remote repository:
+
+The central repository stored on another server.
+
+The `git push` command synchronizes local commits with the remote repository.
+
+---
+
+## Summary
+
+This level introduced modifying a Git repository and contributing changes back to the remote repository.
+
+By reading the challenge instructions, creating the required file, forcing Git to track an ignored file using `git add -f`, committing the changes, and pushing them to the remote repository, I successfully completed the challenge and obtained the password for the next level.
+
+Key concepts learned:
+
+- `.gitignore`
+- Ignored files
+- `git add` and `git add -f`
+- Creating commits with `git commit`
+- Uploading changes with `git push`
+- Output redirection using `>`
+- Local and remote Git repositories

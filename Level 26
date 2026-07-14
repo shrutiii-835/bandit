@@ -1,0 +1,149 @@
+## Objective
+
+The goal of this level was to obtain the password for Bandit Level 27.
+
+After escaping the restricted shell in the previous level, I gained access to the Bandit26 account. The home directory contained a setuid executable named `bandit27-do`. The objective was to understand what this binary did and use it to execute a command as the user `bandit27`, allowing me to read the password file for the next level.
+
+---
+
+## Commands Used
+
+### 1. Listing the files in the home directory
+
+Command:
+
+ls -la
+
+Purpose:
+
+This command was used to inspect the contents of the Bandit26 home directory.
+
+The listing revealed a setuid executable named:
+
+bandit27-do
+
+which was the key to solving the level.
+
+---
+
+### 2. Understanding the executable
+
+Command:
+
+./bandit27-do
+
+Purpose:
+
+Running the executable without any arguments displayed its usage information.
+
+The output indicated that the program executes a command as the user `bandit27`.
+
+This helped identify how the binary should be used.
+
+---
+
+### 3. Executing a command as Bandit27
+
+Command:
+
+./bandit27-do cat /etc/bandit_pass/bandit27
+
+Purpose:
+
+This command instructed the setuid binary to execute:
+
+cat /etc/bandit_pass/bandit27
+
+using the permissions of the `bandit27` user.
+
+Since the binary runs with Bandit27's privileges, it had permission to read the protected password file.
+
+The output displayed the password for the next level.
+
+---
+
+## Why the Solution Worked
+
+The executable `bandit27-do` was a setuid program owned by `bandit27`.
+
+Normally, while logged in as `bandit26`, attempting to read:
+
+/etc/bandit_pass/bandit27
+
+would result in a permission error because the file is owned by `bandit27`.
+
+However, because the setuid bit was enabled, the executable temporarily assumed the permissions of its owner (`bandit27`) while it was running.
+
+When the command:
+
+./bandit27-do cat /etc/bandit_pass/bandit27
+
+was executed, the `cat` command ran with `bandit27`'s privileges instead of `bandit26`'s. This allowed the protected password file to be read successfully.
+
+---
+
+## Linux Concepts / Commands Learned
+
+### 1. Setuid (Set User ID)
+
+Setuid is a special permission that allows an executable to run with the permissions of its owner rather than the user executing it.
+
+This enables controlled privilege escalation for specific programs.
+
+---
+
+### 2. Executing Commands Through a Setuid Program
+
+Some setuid programs act as wrappers that execute user-specified commands with elevated privileges.
+
+In this level:
+
+bandit27-do
+
+accepted a command as an argument and executed it as `bandit27`.
+
+---
+
+### 3. File Permissions
+
+Linux protects files using ownership and permissions.
+
+Normally:
+
+bandit26
+
+could not read:
+
+/etc/bandit_pass/bandit27
+
+because it did not have the required permissions.
+
+The setuid binary temporarily bypassed this restriction by executing the command as `bandit27`.
+
+---
+
+### 4. Command-Line Arguments
+
+Many Linux programs accept additional values after the executable name.
+
+Example:
+
+program argument1 argument2
+
+In this level:
+
+./bandit27-do cat /etc/bandit_pass/bandit27
+
+- `./bandit27-do` → Executable
+- `cat` → Command to execute
+- `/etc/bandit_pass/bandit27` → Argument passed to `cat`
+
+---
+
+## Summary
+
+This level demonstrated how setuid executables can safely perform privileged operations on behalf of another user.
+
+By identifying that `bandit27-do` was a setuid program and understanding that it executed commands as `bandit27`, I was able to run `cat` with elevated privileges and read the protected password file.
+
+This level reinforced important Linux concepts such as setuid permissions, privilege escalation, file ownership, command-line arguments, and secure execution of privileged commands.

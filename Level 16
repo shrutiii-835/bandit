@@ -1,0 +1,75 @@
+# The Objective
+
+* To find the password for **Level 17** by submitting the current level's password to the correct **SSL/TLS-enabled service** running on one of the ports between **31000** and **32000** on `localhost`. The correct service returns an SSH private key, which is then used to log in as `bandit17`.
+
+---
+
+# The Commands You Used
+
+* `cat /etc/bandit_pass/bandit16`
+
+  Purpose: Displays the current level's password that needs to be submitted to the service.
+
+* `nmap localhost -p 31000-32000`
+
+  Purpose: Scans ports `31000` to `32000` on `localhost` to identify which ports have services running.
+
+  Breakdown:
+
+  * `nmap` → Network scanning tool used to discover open ports and services.
+  * `localhost` → The current machine.
+  * `-p 31000-32000` → Scans all ports in the specified range.
+
+* `openssl s_client -connect localhost:<port>`
+
+  Purpose: Creates an SSL/TLS connection to one of the open ports.
+
+  Breakdown:
+
+  * `openssl` → Tool for working with SSL/TLS.
+  * `s_client` → Acts as an SSL/TLS client.
+  * `-connect` → Specifies the host and port to connect to.
+
+* `chmod 600 bandit17.key`
+
+  Purpose: Restricts the permissions of the SSH private key so it can be used for authentication.
+
+* `ssh -i bandit17.key bandit17@bandit.labs.overthewire.org -p 2220`
+
+  Purpose: Logs in as `bandit17` using the SSH private key returned by the correct service.
+
+---
+
+# Why Your Solution Worked
+
+* Since the exact port was unknown, I first scanned the given range using `nmap` to identify the open ports.
+
+* I connected to each open port using `openssl s_client` because the challenge required an SSL/TLS connection.
+
+* After submitting the current password to the correct service, it returned an SSH private key instead of the next password.
+
+* had to copy the ssh key on the local host and then used it ssh into level 17
+
+* I saved the key, secured it using `chmod 600`, and used it to authenticate as `bandit17`, where I could access the next level.
+
+---
+
+# Key Linux Concepts or Commands You Learned
+
+* **nmap** is a network scanning tool used to discover open ports and running services.
+
+* **Open Port** is a port where a service is actively listening for incoming connections.
+
+* **SSL/TLS** encrypts communication between a client and a server.
+
+* **openssl s_client** is used to establish and test SSL/TLS connections.
+
+* **SSH Private Key** is an authentication file used instead of a password to securely log in to a remote machine.
+
+* **chmod 600** sets secure permissions on the private key so only the owner can read and write it.
+
+---
+
+# Takeaway
+
+* This level combined port scanning, SSL/TLS communication, and SSH key authentication. I learned how to discover running services using `nmap`, identify the correct SSL-enabled service, retrieve an SSH private key, and use it to securely log in to the next level.

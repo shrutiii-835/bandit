@@ -1,0 +1,239 @@
+# Bandit Level 32 → Level 33 Documentation
+
+## Objective
+
+The goal of this level was to obtain the password for Bandit Level 33.
+
+After logging into the Bandit32 account, the environment provided a custom restricted shell called the "uppercase shell". This shell converted every command entered by the user into uppercase before execution.
+
+Since Linux commands are case-sensitive, normal commands failed because their uppercase versions did not exist.
+
+The objective was to understand how the restricted shell worked, find a way to escape it, and access a normal shell to read the password file.
+
+---
+
+## Commands Used
+
+### 1. Logging into Bandit32
+
+Command:
+
+ssh bandit32@bandit.labs.overthewire.org -p 2220
+
+Purpose:
+
+Connected to the Bandit32 account using SSH.
+
+After login, instead of receiving a normal Bash shell, a custom uppercase shell was provided.
+
+---
+
+### 2. Testing normal commands
+
+Example:
+
+whoami
+
+The shell converted it into:
+
+WHOAMI
+
+Since Linux commands are case-sensitive, the command failed.
+
+Purpose:
+
+This helped identify that the shell was modifying user input before executing commands.
+
+---
+
+### 3. Escaping the restricted shell
+
+Command:
+
+$0
+
+Purpose:
+
+The `$0` variable stores the name of the current shell or script being executed.
+
+Executing `$0` launched a new shell process.
+
+The new shell did not go through the uppercase conversion, which provided access to a normal Bash environment.
+
+---
+
+### 4. Checking the current user
+
+Command:
+
+whoami
+
+Purpose:
+
+After escaping the restricted shell, this command confirmed that the normal shell was running correctly.
+
+The output showed:
+
+bandit33
+
+---
+
+### 5. Reading the next password
+
+Command:
+
+cat /etc/bandit_pass/bandit33
+
+Purpose:
+
+Since normal shell commands were now available, the password file for Bandit33 could be accessed.
+
+The command displayed the password required for the next level.
+
+---
+
+## Why the Solution Worked
+
+The uppercase shell was a custom restricted environment that modified every command entered by the user.
+
+For example:
+
+Input:
+
+whoami
+
+was changed into:
+
+WHOAMI
+
+Because Linux commands are case-sensitive, the command could not be found.
+
+However, the restriction only affected commands entered directly into the custom shell. It did not prevent the execution of a new shell process.
+
+The special shell variable `$0` contains the name of the current shell. Running `$0` started a new shell instance, bypassing the uppercase conversion mechanism.
+
+Once a normal shell was obtained, regular Linux commands could be executed, allowing access to:
+
+/etc/bandit_pass/bandit33
+
+and the password was retrieved.
+
+---
+
+## Linux Concepts / Commands Learned
+
+### 1. Restricted Shells
+
+A restricted shell is a modified command-line environment that limits what users can execute.
+
+They are commonly used to:
+
+- Restrict user actions
+- Provide limited access
+- Prevent unauthorized commands
+
+Examples include:
+
+- rbash
+- Custom shell scripts
+- Command wrappers
+
+---
+
+### 2. Shell Variables
+
+Shell variables store information used by the shell.
+
+Examples:
+
+$0
+
+Stores the name of the current shell or script.
+
+$HOME
+
+Stores the current user's home directory.
+
+$USER
+
+Stores the current username.
+
+---
+
+### 3. `$0` Variable
+
+The `$0` variable represents the current shell or script name.
+
+In this level:
+
+$0
+
+was used to launch a new shell and escape the restricted environment.
+
+---
+
+### 4. Linux Case Sensitivity
+
+Linux treats uppercase and lowercase characters differently.
+
+Examples:
+
+Valid:
+
+ls
+
+Invalid:
+
+LS
+
+The uppercase shell prevented commands from running by changing them into uppercase versions.
+
+---
+
+### 5. Shell Execution Flow
+
+Normally:
+
+User Input
+      |
+      v
+Shell Parser
+      |
+      v
+Command Execution
+
+
+In this level:
+
+User Input
+      |
+      v
+Uppercase Conversion
+      |
+      v
+Command Execution
+
+
+By starting a new shell, the uppercase conversion step was bypassed.
+
+---
+
+## Summary
+
+This level demonstrated how restricted shells work and how shell variables can sometimes provide escape mechanisms.
+
+The uppercase shell converted all commands into uppercase, preventing normal Linux commands from executing. By using the `$0` shell variable, a new unrestricted shell was launched.
+
+After escaping the restricted environment, the password was retrieved using:
+
+cat /etc/bandit_pass/bandit33
+
+Key concepts learned:
+
+- Restricted shells
+- Shell variables
+- `$0` variable
+- Shell escape techniques
+- Linux case sensitivity
+- Shell execution flow
+- Understanding how commands are processed before execution

@@ -1,0 +1,228 @@
+
+## Objective
+
+The goal of this level was to obtain the password for Bandit Level 30.
+
+Unlike the previous level, the password was not available in the default branch of the Git repository. The objective was to inspect all available branches, identify the branch containing the password, switch to that branch, and read the required file.
+
+---
+
+## Commands Used
+
+### 1. Creating a temporary working directory
+
+Commands:
+
+cd /tmp
+mkdir bandit29
+cd bandit29
+
+Purpose:
+
+A temporary workspace was created inside `/tmp` to safely clone the repository without affecting other files.
+
+---
+
+### 2. Cloning the Git repository
+
+Command:
+
+git clone ssh://bandit29-git@localhost:2220/home/bandit29-git/repo
+
+Purpose:
+
+This command downloaded a complete copy of the remote Git repository, including all commits, branches, and version history.
+
+Authentication was performed using the Bandit29 password.
+
+---
+
+### 3. Entering the repository
+
+Command:
+
+cd repo
+
+Purpose:
+
+Changed the current working directory to the cloned repository so its contents could be explored.
+
+---
+
+### 4. Checking the current branch
+
+Command:
+
+git branch
+
+Purpose:
+
+Displayed the local branches in the repository.
+
+The asterisk (*) indicated the branch that was currently checked out, which was the default branch (`master`).
+
+---
+
+### 5. Listing all branches
+
+Command:
+
+git branch -a
+
+Purpose:
+
+Displayed both local and remote branches.
+
+This revealed that the repository contained additional branches besides the default one. One of these branches stored the password needed for the next level.
+
+---
+
+### 6. Switching to the correct branch
+
+Command:
+
+git checkout dev
+
+(or)
+
+git checkout -b dev origin/dev
+
+Purpose:
+
+This command switched the working directory to the branch containing the password.
+
+If the branch existed only on the remote repository, the `-b` option created a new local branch that tracked the remote branch.
+
+After switching, the files in the repository were automatically updated to match that branch.
+
+---
+
+### 7. Reading the password
+
+Command:
+
+cat README.md
+
+(or `cat README`, depending on the repository)
+
+Purpose:
+
+The README file on the new branch contained the password for Bandit Level 30.
+
+---
+
+## Why the Solution Worked
+
+Git repositories can contain multiple branches, each representing an independent version of the project.
+
+When a repository is cloned, Git usually checks out only the default branch. Although other branches are downloaded, they are not automatically active.
+
+In this level, the password was intentionally stored on a different branch instead of the default one.
+
+By listing all available branches, identifying the correct branch, switching to it using `git checkout`, and reading the README file, the hidden password was recovered.
+
+This level demonstrated that important information may exist in branches other than the currently checked-out one.
+
+---
+
+## Linux Concepts / Commands Learned
+
+### 1. Git Branches
+
+A branch is an independent line of development within a Git repository.
+
+Branches allow multiple versions of the same project to exist simultaneously without affecting each other.
+
+---
+
+### 2. `git branch`
+
+Command:
+
+git branch
+
+Purpose:
+
+Lists all local branches in the repository.
+
+The currently active branch is marked with an asterisk (`*`).
+
+---
+
+### 3. `git branch -a`
+
+Command:
+
+git branch -a
+
+Purpose:
+
+Lists both local and remote branches.
+
+This is useful for discovering branches that exist on the remote repository but have not yet been checked out locally.
+
+---
+
+### 4. Remote Branches
+
+Remote branches represent versions of the repository stored on the remote server.
+
+Example:
+
+origin/master
+origin/dev
+
+The prefix `origin` refers to the default remote repository.
+
+---
+
+### 5. `git checkout`
+
+Command:
+
+git checkout <branch_name>
+
+Purpose:
+
+Switches the working directory to another branch.
+
+Git updates all tracked files to match the selected branch.
+
+---
+
+### 6. Tracking Branch
+
+Command:
+
+git checkout -b <local_branch> origin/<remote_branch>
+
+Purpose:
+
+Creates a new local branch that tracks an existing remote branch.
+
+This allows changes from the remote branch to be viewed and modified locally.
+
+---
+
+### 7. Working Directory
+
+The working directory always reflects the currently checked-out branch.
+
+Switching branches automatically changes the files visible in the working directory to match that branch's contents.
+
+---
+
+## Summary
+
+This level introduced Git branches and demonstrated how different branches can contain different versions of the same project.
+
+By cloning the repository, listing all available branches, switching to the appropriate branch, and reading the README file, I recovered the password for the next level.
+
+Key concepts learned:
+
+- Git branches
+- Local and remote branches
+- Listing branches with `git branch` and `git branch -a`
+- Switching branches using `git checkout`
+- Tracking remote branches
+- Understanding how the working directory changes when switching branches

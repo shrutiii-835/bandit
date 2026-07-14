@@ -1,0 +1,202 @@
+## Objective
+
+The goal of this level was to obtain the password for Bandit Level 29.
+
+Unlike the previous level, the password was not present in the current version of the repository. Instead, it had been removed in a later commit. The objective was to inspect the Git commit history, identify the commit where the password was removed, and recover it from the previous version of the file.
+
+---
+
+## Commands Used
+
+### 1. Creating a temporary working directory
+
+Commands:
+
+cd /tmp
+mkdir bandit28
+cd bandit28
+
+Purpose:
+
+A temporary directory was created inside `/tmp` to provide a clean workspace for cloning the repository.
+
+---
+
+### 2. Cloning the Git repository
+
+Command:
+
+git clone ssh://bandit28-git@localhost:2220/home/bandit28-git/repo
+
+Purpose:
+
+This command cloned the remote Git repository to the local machine.
+
+Authentication was performed using the Bandit28 password. After cloning, a new directory named `repo` was created containing the project files and the complete Git history.
+
+---
+
+### 3. Entering the repository
+
+Command:
+
+cd repo
+
+Purpose:
+
+Changed the current working directory to the cloned repository so its contents and history could be inspected.
+
+---
+
+### 4. Reading the current README file
+
+Command:
+
+cat README.md
+
+(or `cat README`, depending on the repository)
+
+Purpose:
+
+The README file was inspected first to check if it contained the password.
+
+Instead of the actual password, the file showed that the password had been removed, indicating that the repository's history needed to be examined.
+
+---
+
+### 5. Viewing the commit history
+
+Command:
+
+git log
+
+Purpose:
+
+This command displayed the complete commit history of the repository, including the commit IDs, author information, commit dates, and commit messages.
+
+One of the commit messages indicated that the password had been removed (for example, "fix info leak"), suggesting that an earlier commit still contained the original password.
+
+---
+
+### 6. Viewing the previous commit
+
+Command:
+
+git show HEAD~1
+
+(or `git show <commit_hash>`)
+
+Purpose:
+
+This command displayed the contents and changes from the previous commit.
+
+The output showed a diff highlighting what had changed between the previous and current versions of the README file.
+
+The deleted line contained the original password before it was replaced.
+
+---
+
+## Why the Solution Worked
+
+Git stores the complete history of every tracked file, including previous versions that are no longer visible in the latest commit.
+
+Although the password had been removed from the current README file, Git preserved the earlier version in its commit history.
+
+By viewing the previous commit using `git show`, it was possible to inspect the changes made to the file. The diff displayed both the removed and added lines, allowing the original password to be recovered.
+
+This level demonstrated that deleting or modifying a file in Git does not permanently erase its previous contents, as long as the commit history is available.
+
+---
+
+## Linux Concepts / Commands Learned
+
+### 1. Git Commit History
+
+Every change made to a Git repository is stored as a commit.
+
+Each commit represents a snapshot of the project at a particular point in time.
+
+---
+
+### 2. `git log`
+
+Command:
+
+git log
+
+Purpose:
+
+Displays the history of commits in the repository.
+
+Each entry includes:
+
+- Commit hash
+- Author
+- Date
+- Commit message
+
+This information helps identify when changes were made.
+
+---
+
+### 3. Commit Hash
+
+Each Git commit has a unique identifier called a commit hash.
+
+Example:
+
+e65a4d6b...
+
+The hash allows any previous version of the repository to be accessed.
+
+---
+
+### 4. `git show`
+
+Command:
+
+git show HEAD~1
+
+Purpose:
+
+Displays the contents and changes introduced by a specific commit.
+
+It is commonly used to inspect previous versions of files and understand what changed between commits.
+
+---
+
+### 5. Git Diff
+
+A diff represents the differences between two versions of a file.
+
+Symbols used:
+
+- `-` → Content removed from the previous version.
+- `+` → Content added in the new version.
+
+In this level, the removed (`-`) line contained the original password, while the added (`+`) line replaced it with "<password removed>".
+
+---
+
+### 6. Version Control
+
+Git maintains a complete history of all tracked files.
+
+Even if data is deleted or modified in the latest version, earlier versions remain accessible through the commit history unless the repository history is rewritten.
+
+---
+
+## Summary
+
+This level introduced the concept of Git history and demonstrated that previous versions of files can be recovered even after information has been removed from the latest commit.
+
+By inspecting the commit history using `git log` and viewing an earlier commit with `git show`, I recovered the original password from the repository's history.
+
+Key concepts learned:
+
+- Git commit history
+- Viewing commit logs with `git log`
+- Inspecting previous commits using `git show`
+- Understanding Git diffs
+- Recovering deleted information from version history
+- Importance of version control in software development

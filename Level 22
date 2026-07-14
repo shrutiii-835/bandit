@@ -1,0 +1,207 @@
+# Bandit Level 22 → Level 23 Documentation
+
+## Objective
+
+The goal of this level was to find the password for Bandit Level 23.
+
+Similar to the previous level, a program was being executed automatically by the Linux cron scheduler. However, instead of copying the password to a fixed filename, the script generated a unique filename using an MD5 hash.
+
+The challenge was to:
+
+1. Find the cron configuration.
+2. Read the script being executed.
+3. Understand how the script generated the filename.
+4. Recreate the filename using the same logic.
+5. Read the generated file to obtain the password.
+
+---
+
+## Commands Used
+
+### 1. Viewing the cron configuration
+
+Command:
+
+cat /etc/cron.d/cronjob_bandit23
+
+Purpose:
+
+This command was used to identify which script was being executed automatically and under which user account it was running.
+
+The cron entry showed that the script was executed every minute as the user `bandit23`.
+
+---
+
+### 2. Reading the cron script
+
+Command:
+
+cat /usr/bin/cronjob_bandit23.sh
+
+Purpose:
+
+This command displayed the shell script executed by cron.
+
+Instead of directly exposing the password, the script generated a filename by hashing a string and then copied the password into that file.
+
+Reading the script was important because it revealed exactly how the filename was created.
+
+---
+
+### 3. Reproducing the hash
+
+Command:
+
+echo "I am user bandit23" | md5sum
+
+Purpose:
+
+The script generated the filename by hashing the string:
+
+I am user bandit23
+
+Running the same command produced the same MD5 hash because hashing is deterministic—the same input always produces the same output.
+
+The hash was then used as the filename in the `/tmp` directory.
+
+---
+
+### 4. Reading the generated file
+
+Command:
+
+cat /tmp/<generated_hash>
+
+Purpose:
+
+The cron job had already copied the Bandit23 password into this file.
+
+Reading the file revealed the password for the next level.
+
+---
+
+## Why the Solution Worked
+
+The key idea behind this level was understanding that the cron job was running as `bandit23`, not as the currently logged-in user.
+
+The cron configuration contained an entry similar to:
+
+* * * * * bandit23 /usr/bin/cronjob_bandit23.sh
+
+This means the script executes every minute with the permissions of `bandit23`.
+
+Inside the script:
+
+- `whoami` returned `bandit23`.
+- The script generated a filename by calculating the MD5 hash of the string "I am user bandit23".
+- It copied `/etc/bandit_pass/bandit23` into `/tmp/<generated_hash>`.
+
+When I tried running:
+
+cat /etc/bandit_pass/bandit23
+
+or
+
+cat /etc/bandit_pass/bandit23 > /tmp/<generated_hash>
+
+I received a "Permission denied" error because I was logged in as `bandit22`, not `bandit23`.
+
+The important realization was that I was **not supposed to execute the script myself**. The cron job had already executed it automatically. My task was simply to calculate the filename and read the file that cron had already created.
+
+---
+
+## Linux Concepts / Commands Learned
+
+### 1. Reading Shell Scripts
+
+Shell scripts are plain text files containing a sequence of Linux commands.
+
+Instead of blindly executing a script, it is often useful to read it first to understand what it does.
+
+The `cat` command can be used to inspect a script and follow its logic step by step.
+
+---
+
+### 2. Variables in Bash
+
+Variables store values that can be reused later in a script.
+
+Example:
+
+myname=$(whoami)
+
+Here, the output of `whoami` is stored in the variable `myname`.
+
+---
+
+### 3. Command Substitution
+
+Command substitution is written as:
+
+$(command)
+
+It executes the command inside the parentheses and replaces it with its output.
+
+Example:
+
+myname=$(whoami)
+
+becomes:
+
+myname=bandit23
+
+when the script is executed by cron.
+
+---
+
+### 4. MD5 Hashing (`md5sum`)
+
+The `md5sum` command generates a fixed-length hash from any input.
+
+One important property of hashing is that the same input always produces the same output.
+
+This allowed the script to consistently generate the same filename every time it ran.
+
+---
+
+### 5. Pipes (`|`)
+
+The pipe operator (`|`) passes the output of one command as the input to another command.
+
+Example:
+
+echo "I am user bandit23" | md5sum
+
+The text produced by `echo` becomes the input for `md5sum`.
+
+---
+
+### 6. Output Redirection (`>`)
+
+The `>` operator redirects the output of a command into a file.
+
+Example:
+
+cat file1 > file2
+
+copies the contents of `file1` into `file2`, replacing its contents if the file already exists.
+
+---
+
+### 7. Cron Running as Another User
+
+A cron job can execute commands as a different user.
+
+In this level, the script ran as `bandit23`, giving it permission to read the Bandit23 password file.
+
+Although I could not access the password file directly as `bandit22`, I could read the temporary file created by the cron job after it had copied the password.
+
+---
+
+## Summary
+
+This level focused on reading and understanding an existing shell script instead of simply executing commands.
+
+By inspecting the cron configuration and following the shell script step by step, I learned how the filename was generated using an MD5 hash. Since the cron job was already running automatically with `bandit23` privileges, it had copied the password into the generated file. Recreating the same hash allowed me to locate that file and retrieve the password for the next level.
+
+This level introduced several important Linux concepts, including shell scripting, variables, command substitution, hashing with `md5sum`, pipes, output redirection, and how cron jobs can execute commands using another user's permissions.

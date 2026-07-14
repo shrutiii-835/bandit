@@ -1,0 +1,217 @@
+
+
+## Objective
+
+The goal of this level was to find the password for Bandit Level 21.
+
+In this level, there was a setuid executable called `suconnect` in the home directory. Unlike previous levels, this binary did not directly read and display the next password.
+
+The binary works by:
+
+1. Taking a port number as a command-line argument.
+2. Connecting to localhost on that port.
+3. Reading one line of text from the connection.
+4. Comparing the received text with the current level's password (bandit20 password).
+5. If the password is correct, it sends back the password for the next level (bandit21).
+
+To solve this level, we needed to create a listener on a port, allow `suconnect` to connect to it, provide the bandit20 password, and receive the bandit21 password.
+
+
+## Commands Used
+
+### 1. Checking the files and permissions
+
+Command:
+
+ls -l
+
+Purpose:
+
+This was used to view the files in the home directory along with their permissions.
+
+The output showed that `suconnect` had the setuid permission enabled:
+
+-rwsr-x---
+
+The `s` in the owner's execute position indicates that the setuid bit is enabled. This means that when the program is executed, it runs with the privileges of the file owner instead of the user who runs it.
+
+In this case, although we were logged in as `bandit20`, the `suconnect` program runs with `bandit21` privileges.
+
+
+### 2. Starting a listener using Netcat
+
+Command:
+
+nc -l 5000
+
+(or)
+
+nc -l -p 5000
+
+Purpose:
+
+This starts Netcat in listening mode on port 5000.
+
+The purpose of this was to create a server that `suconnect` could connect to.
+
+At this point, Netcat waits for an incoming connection on:
+
+localhost:5000
+
+
+### 3. Running the setuid binary
+
+Command:
+
+./suconnect 5000
+
+Purpose:
+
+This runs the setuid program and tells it to connect to localhost on port 5000.
+
+The program then connects to the Netcat listener we created earlier.
+
+
+### 4. Sending the password
+
+Inside the Netcat terminal, the bandit20 password was entered.
+
+The password was sent through the connection to `suconnect`.
+
+The program verified the password, and because it was running with bandit21 privileges, it was able to retrieve and send back the bandit21 password.
+
+
+## Why the Solution Worked
+
+The main idea behind this level was understanding how processes communicate using network connections.
+
+The `suconnect` program acts as a client. It does not wait for input directly from the terminal. Instead, it connects to a port specified by the user and reads data from that connection.
+
+Netcat was used as the server because it can listen on a port and send/receive data.
+
+The communication flow was:
+
+1. Netcat started listening on port 5000.
+2. `suconnect` connected to localhost:5000.
+3. The bandit20 password was sent through the Netcat connection.
+4. `suconnect` compared the received password with the actual bandit20 password.
+5. Since the password was correct, the program used its bandit21 privileges to access the next password and returned it through the connection.
+
+The reason `./suconnect 5000` initially failed with:
+
+Could not connect
+
+was because there was no service listening on port 5000 at that time.
+
+The correct sequence was:
+
+1. Start the Netcat listener.
+2. Run `suconnect`.
+3. Provide the bandit20 password.
+4. Receive the bandit21 password.
+
+
+## Linux Concepts / Commands Learned
+
+### 1. Setuid Permission
+
+Setuid is a special permission bit given to executable files.
+
+Normally, when a user runs a program, the program runs with the user's permissions.
+
+With setuid enabled, the program runs with the permissions of the file owner.
+
+Example:
+
+-rwsr-x---
+
+The `s` indicates setuid is enabled.
+
+In this level:
+
+- User: bandit20
+- File owner: bandit21
+- Program: suconnect
+
+When bandit20 executes `suconnect`, the program temporarily runs with bandit21's privileges.
+
+This allows it to access resources that bandit20 normally cannot access.
+
+
+### 2. Ports
+
+A port is a communication endpoint used by programs to send and receive data.
+
+A system can have many ports, and different services use different ports.
+
+Examples:
+
+SSH → Port 22
+
+HTTP → Port 80
+
+HTTPS → Port 443
+
+In this level:
+
+localhost:5000
+
+means:
+
+localhost → the current machine
+
+5000 → the communication port
+
+
+### 3. localhost
+
+localhost refers to the same computer that the program is running on.
+
+It is represented by:
+
+127.0.0.1
+
+In this level, both programs were running on the same machine:
+
+suconnect → connects to localhost
+
+Netcat → listens on localhost
+
+
+### 4. Netcat (nc)
+
+Netcat is a networking tool used for creating connections, listening on ports, and transferring data.
+
+Listener mode:
+
+nc -l 5000
+
+means:
+
+Wait for incoming connections on port 5000.
+
+
+### 5. Client-Server Communication
+
+This level introduced the basic client-server model.
+
+A client sends requests, and a server responds.
+
+In this level:
+
+Client:
+suconnect
+
+Server:
+Netcat
+
+The communication happened through a TCP connection on localhost.
+
+
+## Summary
+
+This level taught how a setuid program can perform privileged actions while communicating with another process through a network connection.
+
+The important concepts learned were setuid permissions, TCP communication, ports, localhost, and the client-server model.
+
+Instead of directly accessing the password file, we used the privileged `suconnect` program as a bridge. By creating a listener using Netcat and providing the correct password, the program verified our input and returned the password for the next level.
